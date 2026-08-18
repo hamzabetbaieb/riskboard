@@ -1,0 +1,51 @@
+stages:
+  - build
+  - test
+
+variables:
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+
+cache:
+  paths:
+    - .m2/repository
+    - riskboard-front/node_modules/
+
+backend-build:
+  stage: build
+  image: maven:3.9.11-eclipse-temurin-21
+  script:
+    - cd riskboard
+    - mvn -B -DskipTests compile
+
+frontend-build:
+  stage: build
+  image: node:24
+  script:
+    - cd riskboard-front
+    - npm ci
+    - npm run build
+
+backend-test:
+  stage: test
+  image: maven:3.9.11-eclipse-temurin-21
+  services:
+    - name: postgres:17-alpine
+      alias: postgres
+  variables:
+    POSTGRES_DB: riskboard
+    POSTGRES_USER: riskboard
+    POSTGRES_PASSWORD: riskboard
+    DB_URL: jdbc:postgresql://postgres:5432/riskboard
+    DB_USERNAME: riskboard
+    DB_PASSWORD: riskboard
+  script:
+    - cd riskboard
+    - mvn -B test
+
+frontend-test:
+  stage: test
+  image: node:24
+  script:
+    - cd riskboard-front
+    - npm ci
+    - npm test -- --watch=false

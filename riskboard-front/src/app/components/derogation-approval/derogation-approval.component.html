@@ -1,0 +1,39 @@
+<section class="card">
+  <h2>Demandes en attente</h2>
+  @if (actionMessage) { <p class="success">{{ actionMessage }}</p> }
+  @if (isLoading) { <p>Chargement des demandes en attente...</p> }
+  @if (loadError) { <p class="error">{{ loadError }}</p> }
+  <table>
+    <thead>
+      <tr>
+        <th>Contrepartie</th>
+        <th>Type</th>
+        <th>Montant</th>
+        <th>Raison</th>
+        <th>Demandé par</th>
+        <th>Créé le</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (request of pendingDerogations; track request.id) {
+        <tr>
+          <td>{{ request.counterpartyName }}</td>
+          <td>{{ request.limitType }}</td>
+          <td>{{ request.amount | number:'1.0-2' }}</td>
+          <td>{{ request.reason }}</td>
+          <td>{{ request.requestedBy }}</td>
+          <td>{{ request.createdAt | date:'short' }}</td>
+          <td class="inline">
+            <button (click)="approve(request.id)">Valider</button>
+            <button class="danger" (click)="reject(request.id)">Rejeter</button>
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="7">{{ isLoading ? 'Chargement en cours...' : 'Aucune demande en attente.' }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</section>

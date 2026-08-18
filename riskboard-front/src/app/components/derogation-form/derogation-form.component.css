@@ -1,0 +1,50 @@
+.card {
+  background: white;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+form {
+  display: grid;
+  gap: 0.4rem;
+  max-width: 700px;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 0.45rem;
+}
+
+button {
+  border: 1px solid #2563eb;
+  background: #2563eb;
+  color: white;
+  border-radius: 6px;
+  padding: 0.45rem 0.75rem;
+}
+
+button[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.inline {
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.error {
+  color: #dc2626;
+  margin: 0;
+}
+
+.success {
+  color: #16a34a;
+  margin: 0.6rem 0 0;
+}

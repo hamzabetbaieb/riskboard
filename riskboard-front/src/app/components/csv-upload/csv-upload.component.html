@@ -1,0 +1,11 @@
+<section class="card">
+  <h2>Import CSV</h2>
+  <input type="file" accept=".csv,text/csv" (change)="onFileSelected($event)" />
+  @if (showNoFileSelectedError) { <p class="error">Aucun fichier n'est sélectionné.</p> }
+  @if (selectedFile) { <p>Fichier sélectionné : {{ selectedFile.name }}</p> }
+  <button type="button" (click)="importCsv()" [disabled]="isImporting">
+    {{ isImporting ? 'Import en cours...' : 'Importer' }}
+  </button>
+  @if (importMessage) { <p class="success">{{ importMessage }}</p> }
+  @if (importError) { <p class="error">{{ importError }}</p> }
+</section>

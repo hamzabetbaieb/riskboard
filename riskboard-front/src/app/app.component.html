@@ -1,0 +1,26 @@
+<div class="page">
+  <h1>RiskBoard</h1>
+
+  <nav class="tabs">
+    <button [class.active]="screen === 'dashboard'" (click)="onScreenChange('dashboard')">Dashboard</button>
+    <button [class.active]="screen === 'upload'" (click)="onScreenChange('upload')">Upload CSV</button>
+    <button [class.active]="screen === 'create-derogation'" (click)="onScreenChange('create-derogation')">Nouvelle dérogation</button>
+    <button [class.active]="screen === 'validate-derogation'" (click)="onScreenChange('validate-derogation')">Validation dérogations</button>
+  </nav>
+
+  @if (screen === 'dashboard') {
+    <app-dashboard></app-dashboard>
+  }
+
+  @if (screen === 'upload') {
+    <app-csv-upload (importCompleted)="onImportCompleted()"></app-csv-upload>
+  }
+
+  @if (screen === 'create-derogation') {
+    <app-derogation-form></app-derogation-form>
+  }
+
+  @if (screen === 'validate-derogation') {
+    <app-derogation-approval></app-derogation-approval>
+  }
+</div>

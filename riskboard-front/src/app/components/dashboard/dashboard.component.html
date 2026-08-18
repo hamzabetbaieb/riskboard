@@ -1,0 +1,101 @@
+<section class="card">
+  <h2>Dashboard des risques</h2>
+
+  <div class="toolbar">
+    @if (selectedLimitView === 'DETAILED') {
+      <input
+        type="search"
+        [(ngModel)]="filterName"
+        (ngModelChange)="onFilterChange()"
+        placeholder="Filtrer par nom de contrepartie"
+        aria-label="Filtrer par nom de contrepartie"
+      />
+    }
+
+    <select [value]="selectedLimitView" (change)="onViewModeChange($any($event.target).value)">
+      <option value="DETAILED">Vue détaillée</option>
+      <option value="CREDIT">CREDIT</option>
+      <option value="MARKET">MARKET</option>
+      <option value="LIQUIDITY">LIQUIDITY</option>
+    </select>
+  </div>
+
+  @if (isLoading) {
+    <p class="loading-state">Chargement des limites de risque...</p>
+  }
+
+  @if (loadError) {
+    <p class="error-state">{{ loadError }}</p>
+  }
+
+  @if (selectedLimitView === 'DETAILED') {
+    <table>
+      <thead>
+        <tr>
+          <th (click)="sortBy('counterpartyName')">Nom</th>
+          <th (click)="sortBy('limitType')">Type de limite</th>
+          <th (click)="sortBy('sector')">Secteur</th>
+          <th (click)="sortBy('maxAmount')">Limite Max</th>
+          <th (click)="sortBy('usedAmount')">Utilisé</th>
+          <th (click)="sortBy('usageRate')">% Usage</th>
+          <th (click)="sortBy('riskStatus')">Statut</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of paginatedRows; track row.riskLimitId) {
+          <tr>
+            <td>{{ row.counterpartyName }}</td>
+            <td>{{ row.limitType }}</td>
+            <td>{{ row.sector }}</td>
+            <td>{{ row.maxAmount | number:'1.0-2' }} {{ row.currency }}</td>
+            <td>{{ row.usedAmount | number:'1.0-2' }} {{ row.currency }}</td>
+            <td>{{ row.usageRate | number:'1.0-2' }}%</td>
+            <td>
+              <span class="badge" [class.green]="row.riskStatus === 'GREEN'" [class.orange]="row.riskStatus === 'ORANGE'" [class.red]="row.riskStatus === 'RED'">
+                {{ row.riskStatus }}
+                @if (row.riskStatus === 'RED') { ⚠️ }
+              </span>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="7" class="empty-state">
+              {{ isLoading ? 'Chargement en cours...' : 'Aucune contrepartie ne correspond au filtre.' }}
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    <div class="pager">
+      <button (click)="previousPage()" [disabled]="currentPage === 1">Précédent</button>
+      <span>Page {{ currentPage }} / {{ totalPages }}</span>
+      <button (click)="nextPage()" [disabled]="currentPage === totalPages">Suivant</button>
+    </div>
+  } @else {
+    <table>
+      <thead>
+        <tr>
+          <th>Type de limite</th>
+          <th>Secteur</th>
+          <th>Total Utilisé</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of aggregatedRows; track row.sector) {
+          <tr>
+            <td>{{ row.limitType }}</td>
+            <td>{{ row.sector }}</td>
+            <td>{{ row.totalUsedAmount | number:'1.0-2' }}</td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="3" class="empty-state">
+              {{ isLoading ? 'Chargement en cours...' : 'Aucune limite pour ce type.' }}
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</section>

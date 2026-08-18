@@ -1,0 +1,87 @@
+.card {
+  background: white;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.toolbar {
+  display: flex;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  border: 1px solid #e5e7eb;
+  padding: 0.5rem;
+  text-align: left;
+}
+
+th {
+  background: #f3f4f6;
+}
+
+.badge {
+  padding: 0.15rem 0.4rem;
+  border-radius: 6px;
+  color: white;
+  font-size: 0.85rem;
+}
+
+.green {
+  background: #16a34a;
+}
+
+.orange {
+  background: #f97316;
+}
+
+.red {
+  background: #dc2626;
+}
+
+.pager {
+  margin-top: 0.8rem;
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.empty-state {
+  color: #6b7280;
+  font-style: italic;
+  text-align: center;
+}
+
+.loading-state {
+  color: #1d4ed8;
+}
+
+.error-state {
+  color: #b91c1c;
+}
+
+input,
+select,
+button {
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 0.45rem;
+}
+
+button {
+  border: 1px solid #2563eb;
+  background: #2563eb;
+  color: white;
+}
+
+button[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

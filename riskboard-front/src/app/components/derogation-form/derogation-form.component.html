@@ -1,0 +1,50 @@
+<section class="card">
+  <h2>Créer une demande de dérogation</h2>
+  <form [formGroup]="derogationForm" (ngSubmit)="submitDerogation()">
+    <label>Contrepartie</label>
+    <select formControlName="counterpartyId">
+      <option [ngValue]="null">
+        {{ isLoadingCounterparties ? 'Chargement des contreparties...' : '-- Sélectionner --' }}
+      </option>
+      @for (counterparty of counterparties; track counterparty.id) {
+        <option [ngValue]="counterparty.id">{{ counterparty.name }}</option>
+      }
+    </select>
+    @if (counterpartiesError) { <p class="error">{{ counterpartiesError }}</p> }
+    @if (derogationForm.controls.counterpartyId.touched && derogationForm.controls.counterpartyId.invalid) {
+      <p class="error">La contrepartie est obligatoire.</p>
+    }
+
+    <label>Type de risque</label>
+    <div class="inline">
+      @for (type of limitTypes; track type) {
+        <label><input type="radio" [value]="type" formControlName="limitType" /> {{ type }}</label>
+      }
+    </div>
+    @if (derogationForm.controls.limitType.touched && derogationForm.controls.limitType.invalid) {
+      <p class="error">Le type de risque est obligatoire.</p>
+    }
+
+    <label>Montant demandé</label>
+    <input type="number" formControlName="amount" />
+    @if (amountControl.touched && amountControl.hasError('required')) { <p class="error">Le montant est obligatoire.</p> }
+    @if (amountControl.touched && amountControl.hasError('min')) { <p class="error">Le montant doit être strictement supérieur à 0.</p> }
+    @if (amountControl.touched && (amountControl.hasError('amountExceeded') || amountControl.hasError('riskLimitMissing'))) {
+      <p class="error">{{ amountValidationMessage }}</p>
+    }
+
+    <label>Raison</label>
+    <textarea rows="4" formControlName="reason"></textarea>
+    @if (derogationForm.controls.reason.touched && derogationForm.controls.reason.hasError('required')) { <p class="error">La raison est obligatoire.</p> }
+    @if (derogationForm.controls.reason.touched && derogationForm.controls.reason.hasError('minlength')) { <p class="error">La raison doit contenir au moins 20 caractères.</p> }
+
+    <label>Demandé par</label>
+    <input type="text" formControlName="requestedBy" />
+    @if (derogationForm.controls.requestedBy.touched && derogationForm.controls.requestedBy.hasError('required')) { <p class="error">Le champ demandé par est obligatoire.</p> }
+    @if (derogationForm.controls.requestedBy.touched && derogationForm.controls.requestedBy.hasError('minlength')) { <p class="error">Le champ demandé par doit contenir au moins 6 caractères.</p> }
+
+    <button type="submit" [disabled]="derogationForm.invalid">Soumettre</button>
+  </form>
+  @if (submitSuccess) { <p class="success">{{ submitSuccess }}</p> }
+  @if (submitError) { <p class="error">{{ submitError }}</p> }
+</section>
